@@ -1,4 +1,6 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 def frequency_table(dataframe, column, frequency_column= False):
     '''
@@ -30,3 +32,39 @@ def frequency_table(dataframe, column, frequency_column= False):
     df_frequency['cummulative_relative_frequency'] = df_frequency['relative_frequency'].cumsum()
 
     return df_frequency
+
+
+def composition_hist_box(dataframe, column, interval="auto"):
+    fig, (ax1, ax2) = plt.subplots(
+    nrows=2
+    , ncols=1
+    , gridspec_kw={
+        "height_ratios":(0.15, 0.85),
+        "hspace": 0.05
+    }
+    , sharex=True
+    , figsize=(6, 6)
+    )
+
+    sns.boxplot(
+        data = dataframe, x = column , showmeans=True , color = 'C0' , ax=ax1
+        , meanline=True 
+        , meanprops={
+            'color': 'C1'
+            , 'linewidth': 0.5
+            , 'linestyle': '--'
+            , 'label': 'Mean'
+        }
+    )
+
+    sns.histplot(data = dataframe, x = column, kde=True, bins= interval, ax=ax2)    
+
+    for ax in (ax1, ax2):
+        ax.grid(True, linestyle='--', color = 'gray', alpha=0.2)
+        ax.set_axisbelow(True)
+
+    ax2.axvline(dataframe[column].mean(), color='C1', linestyle='--', label='Mean', linewidth=0.5)
+    ax2.axvline(dataframe[column].median(), color='C2', linestyle='--', label='Median', linewidth=0.5)
+    ax2.axvline(dataframe[column].mode()[0], color='C3', linestyle='--', label='Mode', linewidth=0.5)
+
+    ax2.legend(loc='upper right', fontsize=8, frameon=False)
