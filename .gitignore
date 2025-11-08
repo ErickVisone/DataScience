@@ -1,0 +1,12 @@
+.env
+.venv
+.conf
+*.vscode/
+.idea/
+config/credentials.json
+*.pem
+*.key
+*.prf
+*.ctr
+*.log
+logs/
